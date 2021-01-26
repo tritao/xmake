@@ -25,8 +25,11 @@ rule("protobuf.cpp")
     set_extensions(".proto")
 
     -- build protobuf file
-    before_build_file(function (target, sourcefile_proto, opt)
-        import("proto")(target, "cxx", sourcefile_proto, opt)
+    before_build_files(function (target, sourcebatch, opt)
+        import("proto", {alias = "build_proto"})
+        for _, sourcefile in ipairs(sourcebatch.sourcefiles) do
+            build_proto(target, "cxx", sourcefile, opt)
+        end
     end)
 
 
@@ -37,6 +40,10 @@ rule("protobuf.c")
     set_extensions(".proto")
 
     -- build protobuf file
-    before_build_file(function (target, sourcefile_proto, opt)
-        import("proto")(target, "cc", sourcefile_proto, opt)
+    before_build_files(function (target, sourcebatch, opt)
+        import("proto", {alias = "build_proto"})
+        for _, sourcefile in ipairs(sourcebatch.sourcefiles) do
+            build_proto(target, "cc", sourcefile, opt)
+        end
     end)
+
