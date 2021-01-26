@@ -70,9 +70,10 @@ function _init_argv(...)
 end
 
 -- install package
-function install(package, configs)
+function install(package, configs, opt)
 
     -- pass local repositories
+    opt = opt or {}
     for _, repo in ipairs(repository.repositories()) do
         os.vrunv("xmake", {"repo", "--add", repo:name(), repo:url(), repo:branch()})
     end
@@ -101,7 +102,12 @@ function install(package, configs)
     os.vrunv("xmake", argv)
 
     -- do build
-    argv = _init_argv()
+    local njob = opt.jobs or option.get("jobs")
+    if njob then
+        argv = _init_argv("-j", njob)
+    else
+        argv = _init_argv()
+    end
     os.vrunv("xmake", argv)
 
     -- do install

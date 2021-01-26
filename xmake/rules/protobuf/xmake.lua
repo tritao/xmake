@@ -25,6 +25,7 @@ rule("protobuf.cpp")
     set_extensions(".proto")
 
     -- build protobuf file
+    -- there may be a dependency order between proto files, we can only disable parallel compilation
     before_build_files(function (target, sourcebatch, opt)
         import("proto", {alias = "build_proto"})
         for _, sourcefile in ipairs(sourcebatch.sourcefiles) do
@@ -40,6 +41,7 @@ rule("protobuf.c")
     set_extensions(".proto")
 
     -- build protobuf file
+    -- there may be a dependency order between proto files, we can only disable parallel compilation
     before_build_files(function (target, sourcebatch, opt)
         import("proto", {alias = "build_proto"})
         for _, sourcefile in ipairs(sourcebatch.sourcefiles) do
